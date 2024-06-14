@@ -1,0 +1,246 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+    color: #333;
+
+        height: 100vh;
+        background-image: url(background-image.jpg);
+        background-size: 110% 110%;
+        background-position: center center;
+        animation: shrink 5s infinite alternate;
+      }
+      @keyframes shrink {
+        0% {
+          background-size: 110% 110%;
+        }
+        100% {
+          background-size: 100% 100%;
+        }
+      }
+
+@keyframes zoomBackground {
+    0% {
+        transform: scale(1); /* Normal size */
+    }
+    50% {
+        transform: scale(1.1); /* Zoom in */
+    }
+    100% {
+        transform: scale(1); /* Back to normal size */
+    }
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9); /* semi-transparent white background for better readability */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1 {
+    text-align: center;
+    color: #333; /* Dark color for contrast */
+    font-size: 3em; /* Larger font size for impact */
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Preferred font stack */
+    text-transform: uppercase; /* Convert text to uppercase */
+    position: relative; /* Positioning for pseudo-element */
+}
+
+h1::before {
+    content: '';
+    position: absolute;
+    bottom: -8px; /* Adjust to desired underline position */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%; /* Adjust underline width */
+    height: 2px; /* Underline thickness */
+    background-color: #007bff; /* Accent color for underline */
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Adjust to desired underline position */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Full width */
+    height: 4px; /* Thicker underline */
+    background-image: linear-gradient(to right, #007bff, #00bfff); /* Gradient underline */
+}
+
+
+
+
+
+h2 {
+    color: #666;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+form {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: relative; /* Required for child elements to position relative to this */
+    overflow: hidden; /* Prevents background overflow */
+}
+
+form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('upload.jpg'); /* Replace with your image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5; /* Adjust opacity as needed */
+    z-index: -1; /* Ensure it stays behind content */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333; /* Strong text color */
+}
+
+select, input[type="file"], button, textarea {
+    margin-bottom: 10px;
+    width: calc(100% - 22px); /* Adjust for padding and borders */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 1); /* Full opacity white background */
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Other existing styles */
+
+/* Other existing styles */
+
+textarea[readonly] {
+    background-color: #e9ecef;
+}
+
+textarea[name="modified_subtitles"] {
+    background-color: #fff;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.message {
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1em;
+}
+
+option:hover {
+    background-color: #f0f0f0;
+}
+/* Style for select dropdown */
+select#video_language {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Style for dropdown options */
+select#video_language option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Hover style for dropdown */
+select#video_language:hover {
+    background-color: #f0f0f0;
+}
+
+/* Focus style for dropdown */
+select#video_language:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 50px rgba(0, 123, 255, 0.5);
+}
+
+/* Arrow icon style for dropdown */
+select#video_language::after {
+    content: '\25BC'; /* Unicode character for down arrow */
+    position: absolute;
+    top: calc(50% - 0.5em); /* Center vertically */
+    right: 15px;
+    font-size: 1.2em;
+    pointer-events: none; /* Prevents click on pseudo-element */
+}
+
+/* Styling for the dropdown on hover */
+select#video_language:hover::after {
+    color: #007bff; /* Color change on hover */
+}
+
+/* Styling for the dropdown on focus */
+select#video_language:focus::after {
+    color: #007bff; /* Color change on focus */
+}

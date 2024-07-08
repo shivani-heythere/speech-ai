@@ -3,9 +3,10 @@ import uuid
 import subprocess
 import speech_recognition as sr
 from pydub import AudioSegment
+import difflib
 
-CHUNK_DURATION = 5  # Duration of each audio chunk in seconds
-OVERLAP_DURATION = 1  # Overlap between chunks in seconds
+CHUNK_DURATION = 5  # Reduced duration of each audio chunk in seconds
+OVERLAP_DURATION = 2  # Overlap between chunks in seconds
 
 def convert_video_to_audio(video_path, audio_path):
     subprocess.run(['ffmpeg', '-i', video_path, '-vn', '-acodec', 'pcm_s16le', '-ar', '44100', '-ac', '2', audio_path])
@@ -34,11 +35,11 @@ def convert_seconds_to_srt_time(seconds):
     return f"{hours:02d}:{minutes:02d}:{seconds:02d},{milliseconds:03d}"
 
 def remove_repeated_words(previous_text, current_text):
-    previous_words = previous_text.split()
-    current_words = current_text.split()
-    for i in range(1, min(len(previous_words), len(current_words)) + 1):
-        if previous_words[-i:] == current_words[:i]:
-            return " ".join(current_words[i:])
+    sm = difflib.SequenceMatcher(None, previous_text.split(), current_text.split())
+    match = sm.find_longest_match(0, len(previous_text.split()), 0, len(current_text.split()))
+    if match.size > 0:
+        overlap = " ".join(current_text.split()[match.b + match.size:])
+        return overlap
     return current_text
 
 def generate_subtitles(video_path, video_language='hi-IN'):

@@ -5,12 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subtitle Generator</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #progress-container {
+            display: none;
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        #progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #007bff;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #progress-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+            font-weight: bold;
+        }
+
+        #waiting-message {
+            display: none;
+            margin-top: 20px;
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+
+        
+    </style>
 </head>
 <body>
+    
+    <div class="container1">
+        <h1>How to generate the subtitles :</h1>
+        <h2>Step 1:</h2>
+        <p> Select the Video Language.</p>
+        <h2>Step 2:</h2>
+        <p>Upload the video and then click 'Upload'.</p>
+        <h2>Step 3:</h3>
+        <p> Download the Generated Subtitles</p>
+        <h2>Step 4:</h2>
+        <p>If you are a PRO User , you can modify the subtitles in the Modify Subtitle bar.</p>
+    </div>
+    
+    <p>
+
+    </p>
     <div class="container">
         <h1>Upload Video</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <label for="video_language"><b><i>Video Language:</i></b></label>
+        <form id="upload-form" method="POST" enctype="multipart/form-data">
+            <label for="video_language"><b>Video Language:</b></label>
             <select name="video_language" id="video_language">
                 <option value="hi-IN">Hindi</option>
                 <option value="en-US">English</option>
@@ -49,34 +113,51 @@
                 <option value="ur">Urdu</option>
                 <option value="cy">Welsh</option>
                 <option value="vi">Vietnamese</option>
-                <!-- Add more language options as needed -->
             </select>
-            <br><b><i>
             <label for="file-upload" class="custom-file-upload">
                 <i class="fas fa-cloud-upload-alt"></i> Choose File
             </label>
             <input id="file-upload" type="file" name="file">
-            <button type="submit">Upload</button></i></b>
+            <button type="submit">Upload</button>
         </form>
+
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+            <div id="progress-text">0%</div>
+        </div>
+        <div id="waiting-message">Please wait a moment, subtitles are getting ready</div>
+
         {% if message %}
         <p class="message">{{ message }}</p>
         {% endif %}
-        {% if video_path %}
-        <h2>Uploaded Video:</h2>
-        <a href="{{ url_for('uploaded_file', filename=video_path|basename) }}" target="_blank">Watch Video</a>
-        {% endif %}
-        {% if subtitle_path %}
-        <h2>Generated Subtitles:</h2>
-        <div>
-            <textarea rows="10" cols="50" readonly>{{ subtitles }}</textarea>
-        </div>
-        <h2>Modify Subtitles:</h2>
-        <form method="POST" action="{{ url_for('download_modified_subtitles', filename=subtitle_path|basename) }}">
-            <textarea name="modified_subtitles" rows="10" cols="50">{{ subtitles }}</textarea>
-            <br>
-            <button type="submit">Download Modified Subtitles</button>
-        </form>
-        {% endif %}
     </div>
+    <script>
+        const form = document.getElementById('upload-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const waitingMessage = document.getElementById('waiting-message');
+
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressText.innerText = '0%';
+            waitingMessage.style.display = 'none';
+
+            let width = 0;
+            const interval = setInterval(() => {
+                width++;
+                progressBar.style.width = width + '%';
+                progressText.innerText = width + '%';
+
+                if (width >= 100) {
+                    clearInterval(interval);
+                    waitingMessage.style.display = 'block';
+                    setTimeout(() => form.submit(), 3000); // Submit the form after a delay
+                }
+            }, 100);  // Adjust the timing as needed
+        });
+    </script>
 </body>
 </html>

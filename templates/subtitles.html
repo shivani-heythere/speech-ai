@@ -4,7 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generated Subtitles</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .textarea-container {
+            margin-top: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .font-selector, .color-selector, .size-selector {
+            margin-bottom: 20px;
+        }
+        .subtitle-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <div class="container1">
@@ -27,19 +59,116 @@
         <a href="{{ url_for('uploaded_file', filename=video_path|basename) }}" target="_blank">Watch Video</a>
 
         <h2>Generated Subtitles:</h2>
-        <div class="textarea-container">
-            <textarea rows="10" cols="50" readonly>{{ subtitles }}</textarea>
+        <div class="subtitle-container">
+            <pre>{{ subtitles }}</pre>
         </div>
-        <a href="{{ url_for('download_subtitles', filename=subtitle_path|basename) }}" class="button">Download Subtitles</a>
+        <a href="{{ url_for('download_modified_subtitles', filename=subtitle_path|basename) }}" class="button">Download Subtitles</a>
 
         <h2>Modify Subtitles:</h2>
         <form method="POST" action="{{ url_for('download_modified_subtitles', filename=subtitle_path|basename) }}">
             <div class="textarea-container">
-                <textarea name="modified_subtitles" rows="10" cols="50">{{ subtitles }}</textarea>
+                <textarea name="modified_subtitles" id="modified-subtitles" rows="10" cols="50">{{ subtitles }}</textarea>
             </div>
-            <button type="submit">Download Modified Subtitles</button>
+            <div class="font-selector">
+                <label for="font-family">Font Family:</label>
+                <select id="font-family" name="font_family">
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <!-- Add more font options as needed -->
+                </select>
+            </div>
+            <div class="color-selector">
+                <label for="font-color">Font Color:</label>
+                <input type="color" id="font-color" name="font_color" value="#000000">
+            </div>
+            <div class="size-selector">
+                <label for="font-size">Font Size:</label>
+                <input type="number" id="font-size" name="font_size" value="16" min="10" max="72">
+            <!-- Add the new selectors within the form -->
+<div class="alignment-selector">
+    <label for="text-alignment">Text Alignment:</label>
+    <select id="text-alignment" name="text_alignment">
+        <option value="left">Left</option>
+        <option value="center">Center</option>
+        <option value="right">Right</option>
+    </select>
+</div>
+<div class="background-color-selector">
+    <label for="background-color">Background Color:</label>
+    <input type="color" id="background-color" name="background_color" value="#ffffff">
+</div>
+<div class="text-shadow-selector">
+    <label for="text-shadow">Text Shadow:</label>
+    <input type="text" id="text-shadow" name="text_shadow" placeholder="e.g., 2px 2px #000000">
+</div>
+<div class="border-selector">
+    <label for="border">Text Border:</label>
+    <input type="text" id="border" name="border" placeholder="e.g., 1px solid #000000">
+</div>
+<div class="line-height-selector">
+    <label for="line-height">Line Height:</label>
+    <input type="number" id="line-height" name="line_height" value="1.5" step="0.1" min="1" max="3">
+</div>
+
+            </div>
+            <button type="submit" class="button">Download Modified Subtitles</button>
         </form>
     </div>
     
+    <script>
+        const fontFamilySelector = document.getElementById('font-family');
+        const fontColorSelector = document.getElementById('font-color');
+        const fontSizeSelector = document.getElementById('font-size');
+        const textAlignmentSelector = document.getElementById('text-alignment');
+        const backgroundColorSelector = document.getElementById('background-color');
+        const textShadowSelector = document.getElementById('text-shadow');
+        const borderSelector = document.getElementById('border');
+        const lineHeightSelector = document.getElementById('line-height');
+        const modifiedSubtitlesTextarea = document.getElementById('modified-subtitles');
+        const generatedSubtitlesTextarea = document.getElementById('generated-subtitles');
+
+        fontFamilySelector.addEventListener('change', updateStyles);
+        fontColorSelector.addEventListener('input', updateStyles);
+        fontSizeSelector.addEventListener('input', updateStyles);
+        textAlignmentSelector.addEventListener('change', updateStyles);
+        backgroundColorSelector.addEventListener('input', updateStyles);
+        textShadowSelector.addEventListener('input', updateStyles);
+        borderSelector.addEventListener('input', updateStyles);
+        lineHeightSelector.addEventListener('input', updateStyles);
+
+        function updateStyles() {
+            const fontFamily = fontFamilySelector.value;
+            const fontColor = fontColorSelector.value;
+            const fontSize = fontSizeSelector.value + 'px';
+            const textAlignment = textAlignmentSelector.value;
+            const backgroundColor = backgroundColorSelector.value;
+            const textShadow = textShadowSelector.value;
+            const border = borderSelector.value;
+            const lineHeight = lineHeightSelector.value;
+
+            modifiedSubtitlesTextarea.style.fontFamily = fontFamily;
+            modifiedSubtitlesTextarea.style.color = fontColor;
+            modifiedSubtitlesTextarea.style.fontSize = fontSize;
+            modifiedSubtitlesTextarea.style.textAlign = textAlignment;
+            modifiedSubtitlesTextarea.style.backgroundColor = backgroundColor;
+            modifiedSubtitlesTextarea.style.textShadow = textShadow;
+            modifiedSubtitlesTextarea.style.border = border;
+            modifiedSubtitlesTextarea.style.lineHeight = lineHeight;
+
+            // Ensure generated subtitles are not modified
+            generatedSubtitlesTextarea.style.fontFamily = '';
+            generatedSubtitlesTextarea.style.color = '';
+            generatedSubtitlesTextarea.style.fontSize = '';
+            generatedSubtitlesTextarea.style.textAlign = '';
+            generatedSubtitlesTextarea.style.backgroundColor = '';
+            generatedSubtitlesTextarea.style.textShadow = '';
+            generatedSubtitlesTextarea.style.border = '';
+            generatedSubtitlesTextarea.style.lineHeight = '';
+        }
+
+        updateStyles();
+    </script>
 </body>
 </html>

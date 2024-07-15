@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subtitle Generator</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-        
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -49,11 +48,9 @@
             font-weight: bold;
             text-align: center;
         }
-        
-
-        
     </style>
 </head>
+
 <body>
     
     <div class="container1">
@@ -120,7 +117,7 @@
             <input id="file-upload" type="file" name="file">
             <button type="submit">Upload</button>
         </form>
-
+        
         <div id="progress-container">
             <div id="progress-bar"></div>
             <div id="progress-text">0%</div>
@@ -132,31 +129,19 @@
         {% endif %}
     </div>
     <script>
-        const form = document.getElementById('upload-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const progressContainer = document.getElementById('progress-container');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const waitingMessage = document.getElementById('waiting-message');
-
-            progressContainer.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressText.innerText = '0%';
-            waitingMessage.style.display = 'none';
-
-            let width = 0;
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('progress-container').style.display = 'block';
+            document.getElementById('waiting-message').style.display = 'block';
+            let progress = 0;
             const interval = setInterval(() => {
-                width++;
-                progressBar.style.width = width + '%';
-                progressText.innerText = width + '%';
-
-                if (width >= 100) {
+                if (progress >= 100) {
                     clearInterval(interval);
-                    waitingMessage.style.display = 'block';
-                    setTimeout(() => form.submit(), 3000); // Submit the form after a delay
+                } else {
+                    progress += 10;
+                    document.getElementById('progress-bar').style.width = progress + '%';
+                    document.getElementById('progress-text').textContent = progress + '%';
                 }
-            }, 100);  // Adjust the timing as needed
+            }, 1000);
         });
     </script>
 </body>
